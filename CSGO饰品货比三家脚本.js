@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         CSGO饰品价格对比脚本
 // @connect      *
-// @version      1.6
+// @version      1.7
 // @description  将各个CSGO饰品交易平台的价格放在一起显示，省去打开多个网页的繁琐操作！
 // @author       RookieHong
 // @grant        GM_xmlhttpRequest
@@ -194,11 +194,11 @@ function addIGXE(igxeURL, li, itemName) {
             var items = $(body).find(".dataList").find('.single');
             var hasNextPage = $(body).find('#page-content .next').length == 0 ? false : true;   //判断是否有下一页
             for (var i = 0; i < items.length; i++) {
-                var name = $(items[i]).find('div.name').find('a').text().trim();
+                var name = $(items[i]).find('div.name').text().trim();
                 if (Trim(name) == Trim(itemName)) {
-                    var url = 'https://www.igxe.cn' + $(items[i]).find('div.img').find('a').attr('href');
-                    var sum = $(items[i]).find('div.sum').find('span').text().trim();
-                    var price = $(items[i]).find('div.price').find('span').text().trim();
+                    var url = 'https://www.igxe.cn' + $(items[i]).attr('href');
+                    var sum = $(items[i]).find('div.clearfix').find('div.sum').text().trim();
+                    var price = $(items[i]).find('div.clearfix').find('div.price').find('span').text().trim() + $(items[i]).find('div.clearfix').find('div.price').find('sub').text().trim();
                     $(li).html('<a href="' + url + '" style="padding: 0px"><span class="myTitle">IGXE：</span>' + '在售数量：<span class="mySum">' + sum + '</span>售价：<span class="myPrice">' + price + '</span></a>');
                     return;
                 }
@@ -320,7 +320,7 @@ function c5() {
 }
 
 function igxe() {
-    $('.dataList').on('mouseenter', 'div.single', function () {
+    $('.dataList').on('mouseenter', 'a.single', function () {
         if ($(this).find('div.igxe-dropdown-content').length > 0) {
             $(this).find('div.igxe-dropdown-content').css('display', 'block');
             return;
@@ -332,7 +332,7 @@ function igxe() {
         $(this).attr('mouseover', 'true');   //当前鼠标在该物品上
 
         var list = $('<div class="igxe-dropdown-content"></div>');
-        var itemName = $(this).find('div.name').find('a').attr('title');
+        var itemName = $(this).find('div.name').attr('title');
 
         var c5URL = 'https://www.c5game.com/csgo/default/result.html?k=' + itemName + '&page=1';
         var c5Li = $('<li class="igli"><span class="myTitle">C5：</span><span>载入中...</li>');
@@ -355,7 +355,7 @@ function igxe() {
         $(this).append(list);
     });
 
-    $('.dataList').on('mouseleave', 'div.single', function () {
+    $('.dataList').on('mouseleave', 'a.single', function () {
         if ($(this).find('div.igxe-dropdown-content').length > 0) {
             $(this).find('div.igxe-dropdown-content').css('display', 'none');
             return;
